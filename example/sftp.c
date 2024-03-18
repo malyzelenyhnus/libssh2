@@ -161,6 +161,122 @@ int main(int argc, char *argv[])
     /* Since we have set non-blocking, tell libssh2 we are blocking */
     libssh2_session_set_blocking(session, 1);
 
+    // JC: bsc 1221622
+    // libssh2_session_method_pref returns -41
+    // broken
+    // MAC_LIST "hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2-256,hmac-sha2-512"
+    // This works
+    // MAC_LIST "hmac-sha2-256,hmac-sha2-512,hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com"
+
+    const char *jc_kex = getenv("JC_KEX");
+    if (jc_kex != NULL) {
+        fprintf(stderr, "JC: Going to set KEX to %s\n", jc_kex);
+        rc = libssh2_session_method_pref(session, LIBSSH2_METHOD_KEX, jc_kex);
+        if (rc) {
+          fprintf(stderr, "JC: Failure modifying KEX to %s: %d\n", jc_kex, rc);
+          goto shutdown;
+        }
+    }
+
+    const char *jc_hostkey = getenv("JC_HOSTKEY");
+    if (jc_hostkey != NULL) {
+        fprintf(stderr, "JC: Going to set HOSTKEY to %s\n", jc_hostkey);
+        rc = libssh2_session_method_pref(session, LIBSSH2_METHOD_HOSTKEY, jc_hostkey);
+        if (rc) {
+          fprintf(stderr, "JC: Failure modifying HOSTKEY to %s: %d\n", jc_hostkey, rc);
+          goto shutdown;
+        }
+    }
+
+    const char *jc_crypt_cs = getenv("JC_CRYPT_CS");
+    if (jc_crypt_cs != NULL) {
+        fprintf(stderr, "JC: Going to set CRYPT_CS to %s\n", jc_crypt_cs);
+        rc = libssh2_session_method_pref(session, LIBSSH2_METHOD_CRYPT_CS, jc_crypt_cs);
+        if (rc) {
+          fprintf(stderr, "JC: Failure modifying CRYPT_CS to %s: %d\n", jc_crypt_cs, rc);
+          goto shutdown;
+        }
+    }
+
+    const char *jc_crypt_sc = getenv("JC_CRYPT_SC");
+    if (jc_crypt_sc != NULL) {
+        fprintf(stderr, "JC: Going to set CRYPT_SC to %s\n", jc_crypt_sc);
+        rc = libssh2_session_method_pref(session, LIBSSH2_METHOD_CRYPT_SC, jc_crypt_sc);
+        if (rc) {
+          fprintf(stderr, "JC: Failure modifying CRYPT_SC to %s: %d\n", jc_crypt_sc, rc);
+          goto shutdown;
+        }
+    }
+
+    const char *jc_mac_cs = getenv("JC_MAC_CS");
+    if (jc_mac_cs != NULL) {
+        fprintf(stderr, "JC: Going to set MAC_CS to %s\n", jc_mac_cs);
+        rc = libssh2_session_method_pref(session, LIBSSH2_METHOD_MAC_CS, jc_mac_cs);
+        if (rc) {
+          fprintf(stderr, "JC: Failure modifying MAC_CS to %s: %d\n", jc_mac_cs, rc);
+          goto shutdown;
+        }
+    }
+
+    const char *jc_mac_sc = getenv("JC_MAC_SC");
+    if (jc_mac_sc != NULL) {
+        fprintf(stderr, "JC: Going to set MAC_SC to %s\n", jc_mac_sc);
+        rc = libssh2_session_method_pref(session, LIBSSH2_METHOD_MAC_SC, jc_mac_sc);
+        if (rc) {
+          fprintf(stderr, "JC: Failure modifying MAC_SC to %s: %d\n", jc_mac_sc, rc);
+          goto shutdown;
+        }
+    }
+
+    const char *jc_comp_cs = getenv("JC_COMP_CS");
+    if (jc_comp_cs != NULL) {
+        fprintf(stderr, "JC: Going to set COMP_CS to %s\n", jc_comp_cs);
+        rc = libssh2_session_method_pref(session, LIBSSH2_METHOD_COMP_CS, jc_comp_cs);
+        if (rc) {
+          fprintf(stderr, "JC: Failure modifying COMP_CS to %s: %d\n", jc_comp_cs, rc);
+          goto shutdown;
+        }
+    }
+
+    const char *jc_comp_sc = getenv("JC_COMP_SC");
+    if (jc_comp_sc != NULL) {
+        fprintf(stderr, "JC: Going to set COMP_SC to %s\n", jc_comp_sc);
+        rc = libssh2_session_method_pref(session, LIBSSH2_METHOD_COMP_SC, jc_comp_sc);
+        if (rc) {
+          fprintf(stderr, "JC: Failure modifying COMP_SC to %s: %d\n", jc_comp_sc, rc);
+          goto shutdown;
+        }
+    }
+
+    const char *jc_lang_cs = getenv("JC_LANG_CS");
+    if (jc_lang_cs != NULL) {
+        fprintf(stderr, "JC: Going to set LANG_CS to %s\n", jc_lang_cs);
+        rc = libssh2_session_method_pref(session, LIBSSH2_METHOD_LANG_CS, jc_lang_cs);
+        if (rc) {
+          fprintf(stderr, "JC: Failure modifying LANG_CS to %s: %d\n", jc_lang_cs, rc);
+          goto shutdown;
+        }
+    }
+
+    const char *jc_lang_sc = getenv("JC_LANG_SC");
+    if (jc_lang_sc != NULL) {
+        fprintf(stderr, "JC: Going to set LANG_SC to %s\n", jc_lang_sc);
+        rc = libssh2_session_method_pref(session, LIBSSH2_METHOD_LANG_SC, jc_lang_sc);
+        if (rc) {
+          fprintf(stderr, "JC: Failure modifying LANG_SC to %s: %d\n", jc_lang_sc, rc);
+          goto shutdown;
+        }
+    }
+
+    const char *jc_sign_algo = getenv("JC_SIGN_ALGO");
+    if (jc_sign_algo != NULL) {
+        fprintf(stderr, "JC: Going to set SIGN_ALGO to %s\n", jc_sign_algo);
+        rc = libssh2_session_method_pref(session, LIBSSH2_METHOD_SIGN_ALGO, jc_sign_algo);
+        if (rc) {
+          fprintf(stderr, "JC: Failure modifying SIGN_ALGO to %s: %d\n", jc_sign_algo, rc);
+          goto shutdown;
+        }
+    }
     /* ... start it up. This will trade welcome banners, exchange keys,
      * and setup crypto, compression, and MAC layers
      */

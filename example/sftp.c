@@ -33,6 +33,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 static const char *pubkey = "/home/username/.ssh/id_rsa.pub";
 static const char *privkey = "/home/username/.ssh/id_rsa";

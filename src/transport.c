@@ -550,6 +550,9 @@ int _libssh2_transport_read(LIBSSH2_SESSION * session)
                 return LIBSSH2_ERROR_DECRYPT;
             }
             else if(p->packet_length > LIBSSH2_PACKET_MAXPAYLOAD) {
+                _libssh2_debug((session, LIBSSH2_TRACE_TRANS,
+                               "JC: %ld: packet too long %ld (max %ld)",
+                               __LINE__, p->packet_length, LIBSSH2_PACKET_MAXPAYLOAD));
                 return LIBSSH2_ERROR_OUT_OF_BOUNDARY;
             }
 
@@ -584,6 +587,9 @@ int _libssh2_transport_read(LIBSSH2_SESSION * session)
              * padding, and MAC.)."
              */
             if(total_num > LIBSSH2_PACKET_MAXPAYLOAD || total_num == 0) {
+                _libssh2_debug((session, LIBSSH2_TRACE_TRANS,
+                               "JC: %ld: RFC4253 section 6.1 total %ld (max %ld)",
+                               __LINE__, total_num, LIBSSH2_PACKET_MAXPAYLOAD));
                 return LIBSSH2_ERROR_OUT_OF_BOUNDARY;
             }
 
@@ -612,6 +618,9 @@ int _libssh2_transport_read(LIBSSH2_SESSION * session)
                 else {
                     if(p->payload)
                         LIBSSH2_FREE(session, p->payload);
+                    _libssh2_debug((session, LIBSSH2_TRACE_TRANS,
+                                    "JC: %ld: total %ld, blocksize %ld)",
+                                    __LINE__, total_num, blocksize));
                     return LIBSSH2_ERROR_OUT_OF_BOUNDARY;
                 }
             }
@@ -713,6 +722,9 @@ int _libssh2_transport_read(LIBSSH2_SESSION * session)
                 memcpy(p->wptr, &p->buf[p->readidx], numbytes);
             }
             else {
+                _libssh2_debug((session, LIBSSH2_TRACE_TRANS,
+                               "JC: %ld: numbytes %ld <= %ld)",
+                               __LINE__, numbytes, (p->total_num - (p->wptr - p->payload))));
                 if(p->payload)
                     LIBSSH2_FREE(session, p->payload);
                 return LIBSSH2_ERROR_OUT_OF_BOUNDARY;

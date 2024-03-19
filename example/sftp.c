@@ -159,6 +159,9 @@ int main(int argc, char *argv[])
         goto shutdown;
     }
 
+    /* Enable all debugging when libssh2 was built with debugging enabled */
+    libssh2_trace(session, ~0);
+
     /* Since we have set non-blocking, tell libssh2 we are blocking */
     libssh2_session_set_blocking(session, 1);
 
